@@ -242,13 +242,22 @@ def sanitize_name(name,what="branch", mapping={}):
   if not auto_sanitize:
     return mapping.get(name,name)
   n=mapping.get(name,name)
+  print(n)
   p=re.compile(b'([\\[ ~^:?\\\\*]|\.\.)')
   n=p.sub(b'_', n)
+  # sjr Some branches have muliple /s.
+  p=re.compile(b'/{2,}')
+  n=p.sub(b'/_', n)
+  pd=re.compile(b'^develop/')
+  n=pd.sub(b'develop_', n)
+  stderr_buffer.write(b'Branch %s\n' % n)
+  prf = re.compile(b'((release|feature|hotfix)/.*)/')
+  n = prf.sub(r'\1_',n)
+
   if n[-1:] in (b'/', b'.'): n=n[:-1]+b'_'
   n=b'/'.join([dot(s) for s in n.split(b'/')])
   p=re.compile(b'_+')
   n=p.sub(b'_', n)
-
   if n!=name:
     stderr_buffer.write(
       b'Warning: sanitized %s [%s] to [%s]\n' % (what.encode(), name, n)
