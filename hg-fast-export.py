@@ -495,7 +495,7 @@ def verify_heads(ui,repo,cache,force,ignore_unnamed_heads,branchesmap):
         % repo.changelog.rev(h)
       )
       unnamed_heads=True
-      if not force and not ignore_unnamed_heads: return False
+      #if not force and not ignore_unnamed_heads: return False
     t[branch]=True
   if unnamed_heads and not force and not ignore_unnamed_heads: return False
   return True
